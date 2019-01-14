@@ -26,7 +26,7 @@ struct M3x66
 {
 	double SG11[6][6]; //SG11
 	double SG12[6][6]; //SG12
-	//double SG21[6][6]; //SG21
+	//double SG21[6][6]; //SG21		//deÄŸiÅŸti?
 	double SG22[6][6]; //SG22
 };
 struct M4x66
@@ -1138,7 +1138,7 @@ int main()
 	checkCudaErrors(cudaEventCreate(&stop));
 
 	// =======================================================
-	// Çubuk veri giriþi =====================================
+	// Ã‡ubuk veri giriÃ¾i =====================================
 
 	Eleman *Yapi_elemanlari;
 	Yapi_elemanlari = (Eleman*)malloc(sizeof(Eleman) * 12);
@@ -1161,7 +1161,7 @@ int main()
 	// =======================================================
 
 	// =======================================================
-	// Düðüm noktalarý bulma =================================
+	// DÃ¼Ã°Ã¼m noktalarÃ½ bulma =================================
 	DugumNokta *Dgm_Noktalari;
 	Dgm_Noktalari = (DugumNokta*)malloc(sizeof(DugumNokta)*Dugum_sayisi);
 	for (int i = 0; i < Dugum_sayisi; i++)
@@ -1183,7 +1183,7 @@ int main()
 	// =======================================================
 
 	// =======================================================
-	// Çubuklarýn uç noktalarý vektörel kaydý ================
+	// Ã‡ubuklarÃ½n uÃ§ noktalarÃ½ vektÃ¶rel kaydÃ½ ================
 
 	int *Y_Eleman_d1, *Y_Eleman_d2;
 	int *d_Y_Eleman_d1, *d_Y_Eleman_d2;
@@ -1194,7 +1194,7 @@ int main()
 	// =======================================================
 
 	// =======================================================
-	//GPU hazýrlýðý ==========================================
+	//GPU hazÃ½rlÃ½Ã°Ã½ ==========================================
 	const int BLOCK_S = 1; // 24*1020*12 //1875
 	int THREAD_S = Cubuk_sayisi; //896 //85*12  ---- 3.243 gb //64*12//768
 	const int iter = BLOCK_S * THREAD_S;
@@ -1250,13 +1250,13 @@ int main()
 	// =======================================================
 
 	// =======================================================
-	// Ekrana SM yazdýr ======================================
+	// Ekrana SM yazdÃ½r ======================================
 	cout << endl;
 
 	M6x6 **SM;
-	SM = new M6x6*[Dugum_sayisi]; // SM matrix i oluþturuldu.
+	SM = new M6x6*[Dugum_sayisi]; // SM matrix i oluÃ¾turuldu.
 
-	double tempd[36];				// 'SM matrix i Sýfýrlanýyor...
+	double tempd[36];				// 'SM matrix i SÃ½fÃ½rlanÃ½yor...
 	for (int j = 0; j < 36; j++)
 	{
 		tempd[j] = 0;
@@ -1272,7 +1272,7 @@ int main()
 				memcpy(SM[i][j].M6, tempd, sizeof(M6x6));
 			}
 		}
-	}   // SM matrix i sýfýrlandý.
+	}   // SM matrix i sÃ½fÃ½rlandÃ½.
 
 
 	Yapi_oku(h2_M_snc, SM, Yapi_elemanlari, Dugum_sayisi, Cubuk_sayisi, Dgm_Noktalari);
@@ -1281,7 +1281,7 @@ int main()
 	double **SMM;
 	SMM = new double*[Dugum_sayisi * 6];
 
-	double *tempSMM;						// rastgele YK yüklemeleri vektörü
+	double *tempSMM;						// rastgele YK yÃ¼klemeleri vektÃ¶rÃ¼
 	tempSMM = new double[Dugum_sayisi * 6];
 	for (int i = 0; i < Dugum_sayisi * 6; i++) { tempSMM[i] = 0; }
 
@@ -1313,7 +1313,7 @@ int main()
 
 	int k = 0; int alpha = 0, betaa = 1;
 	cout.precision(2);
-	for (int i = 0; i < Dugum_sayisi * 6; i++)				//Ekrana döküm
+	for (int i = 0; i < Dugum_sayisi * 6; i++)				//Ekrana dÃ¶kÃ¼m
 	{
 		if (((i) % 12 == 0))
 		{
@@ -1384,11 +1384,11 @@ void S_TamYap(int dugumsayisi, int *S)
 	}
 }
 
-//SM matrix konum tespiti ve oluþturulmasý
+//SM matrix konum tespiti ve oluÃ¾turulmasÃ½
 void Yapi_oku(M4x66 *SG_m, M6x6 **SMatrix, Eleman *Y_Eleman, int Dugum_sayisi, int Eleman_sayisi, DugumNokta *DGM_N)
 {
 	//SMatrix[1][1].M6[0][0] = 0;
-	for (int i = 0; i < Eleman_sayisi; i++) //eleman sayýsý kadar tekrar eder. mesnetleri SM matrix e eklemek için
+	for (int i = 0; i < Eleman_sayisi; i++) //eleman sayÃ½sÃ½ kadar tekrar eder. mesnetleri SM matrix e eklemek iÃ§in
 	{
 		/*if (DGM_N[i].Dgm[1] != -1)*/ {
 			MatTopla6x6(SMatrix[Y_Eleman[i].d1 - 1][Y_Eleman[i].d1 - 1], SG_m[i].SG11);
@@ -1399,7 +1399,7 @@ void Yapi_oku(M4x66 *SG_m, M6x6 **SMatrix, Eleman *Y_Eleman, int Dugum_sayisi, i
 	}
 }
 
-//Ýki 6x6 matrix i toplayýp ilkine ekler
+//Ãki 6x6 matrix i toplayÃ½p ilkine ekler
 void MatTopla6x6(M6x6 &girdi, double(*girdi2)[6])
 {
 	for (int i = 0; i < 6; i++)
@@ -1411,7 +1411,7 @@ void MatTopla6x6(M6x6 &girdi, double(*girdi2)[6])
 	}
 }
 
-//Ýki 6x6 matrix i toplayýp ilkine ekler
+//Ãki 6x6 matrix i toplayÃ½p ilkine ekler
 __device__ void Gpu_MatTopla6x6(int x, int y, double(*girdi2)[6], double *SMMAT)
 {
 	for (int i = 0; i < 6; i++)
